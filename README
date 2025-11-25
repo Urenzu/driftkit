@@ -1,0 +1,40 @@
+driftkit
+========
+
+Lightweight Parquet-first dataset stats and drift checker.
+
+What it does
+- Computes per-column stats from Parquet (row count, missing, distinct, numeric mean/std/min/max/histogram, categorical top values).
+- Compares two Parquet snapshots to surface drift (missing-rate deltas, mean/std deltas, PSI for numeric, JSD for categorical).
+
+Install (editable)
+```
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -e .
+```
+
+Quickstart (CLI)
+- Stats: `driftkit stats path/to/file.parquet`
+- Compare: `driftkit compare ref.parquet cur.parquet`
+Both print JSON/text to stdout; redirect to a file if desired.
+
+Python API
+```python
+import driftkit as dk
+
+ref = dk.compute_stats("ref.parquet")
+cur = dk.compute_stats("cur.parquet")
+drift = dk.compare_datasets(ref, cur)
+print(dk.format_drift_report(drift))
+```
+
+Project layout (v0.1)
+- `driftkit/`: library and CLI entrypoint.
+- `examples/`: example assets (generated Parquet files are ignored).
+- `tests/`: smoke tests (currently ignored from VCS; keep locally for dev).
+
+Limits (v0.1)
+- Parquet-only ingest; other formats not yet supported.
+- No schema validation; columns missing or type-mismatched are skipped in compare.
+- PSI uses numpy histograms; JSD uses value counts (heavy on very high-cardinality columns).
