@@ -1,4 +1,4 @@
-from .core.drift_api import DriftResult, compare_datasets
+from .core.drift_api import DriftResult, SchemaChange, compare_datasets
 from .core.report import format_drift_report
 from .core.stats_api import ColumnStats, DatasetStats, compute_stats
 
@@ -9,4 +9,5 @@ __all__ = [
     "ColumnStats",
     "DatasetStats",
     "DriftResult",
+    "SchemaChange",
 ]
